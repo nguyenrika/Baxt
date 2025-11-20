@@ -14,6 +14,7 @@
             --card-bg: #1e293b;
             --text: #f8fafc;
             --accent: #ec4899;
+            --danger: #ef4444;
         }
 
         * {
@@ -59,13 +60,27 @@
         }
 
         /* Controls Section */
-        .controls {
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .card {
             background: var(--card-bg);
             padding: 25px;
             border-radius: 20px;
-            width: 100%;
-            max-width: 400px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .section-title {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: var(--primary);
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
         }
 
         .input-group {
@@ -106,7 +121,7 @@
         .btn-add:hover { background: var(--secondary); }
 
         .name-list {
-            max-height: 300px;
+            max-height: 200px;
             overflow-y: auto;
             list-style: none;
         }
@@ -123,17 +138,51 @@
         }
 
         .btn-delete {
-            background: #ef4444;
+            background: var(--danger);
             color: white;
             padding: 5px 10px;
             font-size: 0.8rem;
         }
 
+        /* Settings Inputs */
+        .setting-row {
+            margin-bottom: 15px;
+        }
+        
+        .setting-row label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .value-display {
+            float: left;
+            background: #334155;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
         /* Wheel Section */
+        .wheel-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
         .wheel-container {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 450px;
+            height: 450px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -142,39 +191,52 @@
         canvas {
             width: 100%;
             height: 100%;
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-            border: 5px solid white;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+            border: 8px solid white;
+            /* Transition is set via JS now */
+        }
+
+        /* The Pointer (Triangle) */
+        .pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 50px;
+            background: var(--accent);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 20;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
         }
 
         .spin-btn {
             position: absolute;
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             background: white;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
             z-index: 10;
             font-weight: bold;
+            font-size: 1.2rem;
             color: var(--bg);
-            border: 4px solid var(--accent);
+            border: 5px solid var(--primary);
             user-select: none;
+            transition: transform 0.2s;
         }
 
-        .spin-btn::after {
-            content: "";
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 25px solid var(--accent);
+        .spin-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .spin-btn:active {
+            transform: scale(0.95);
         }
 
         /* Winner Modal */
@@ -184,34 +246,43 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 100;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-content {
             background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
+            padding: 50px;
+            border-radius: 25px;
             text-align: center;
             animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            border: 2px solid var(--primary);
+            border: 2px solid var(--accent);
+            max-width: 90%;
+        }
+
+        .winner-label {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 10px;
         }
 
         .winner-name {
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: var(--accent);
-            margin: 20px 0;
+            margin: 10px 0 30px 0;
             font-weight: bold;
+            text-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
         }
 
         .btn-close {
             background: var(--primary);
             color: white;
-            margin-top: 20px;
+            font-size: 1.1rem;
+            padding: 15px 40px;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -221,6 +292,7 @@
         @media (max-width: 768px) {
             .wheel-container { width: 320px; height: 320px; }
             .header h1 { font-size: 2rem; }
+            .pointer { width: 30px; height: 40px; top: -10px; }
         }
     </style>
 </head>
@@ -228,28 +300,45 @@
 
     <div class="header">
         <h1>چەرخی بەخت - هەڵبژاردنی براوە</h1>
-        <p>ناوەکان داخڵ بکە و کرتە لە ناوەڕاست بکە</p>
+        <p>ناوەکان داخڵ بکە و کرتە لە ناوەڕاست بکە بۆ سووڕانەوە</p>
     </div>
 
     <div class="container">
-        <div class="controls">
-            <div class="input-group">
-                <input type="text" id="nameInput" placeholder="ناوی بەشداربوو بنووسە..." onkeypress="handleEnter(event)">
-                <button class="btn-add" onclick="addName()">زیادکردن</button>
+        
+        <div class="left-panel">
+            <div class="card">
+                <h3 class="section-title">لیستی ناوەکان</h3>
+                <div class="input-group">
+                    <input type="text" id="nameInput" placeholder="ناوی بەشداربوو..." onkeypress="handleEnter(event)">
+                    <button class="btn-add" onclick="addName()">زیادکردن</button>
+                </div>
+                <ul class="name-list" id="nameList">
+                    </ul>
             </div>
-            <ul class="name-list" id="nameList">
-                </ul>
+
+            <div class="card">
+                <h3 class="section-title">ڕێکخستنەکان</h3>
+                <div class="setting-row">
+                    <label>
+                        ماوەی سووڕانەوە (بە چرکە): 
+                        <span id="durationVal" class="value-display">5s</span>
+                    </label>
+                    <input type="range" id="spinDuration" min="1" max="15" value="5" step="1" oninput="updateSettings()">
+                </div>
+            </div>
         </div>
 
-        <div class="wheel-container">
-            <canvas id="wheelCanvas" width="500" height="500"></canvas>
-            <div class="spin-btn" onclick="spinWheel()">سوڕان</div>
+        <div class="wheel-wrapper">
+            <div class="wheel-container">
+                <div class="pointer"></div> <canvas id="wheelCanvas" width="500" height="500"></canvas>
+                <div class="spin-btn" onclick="spinWheel()">سووڕان</div>
+            </div>
         </div>
     </div>
 
     <div class="modal" id="winnerModal">
         <div class="modal-content">
-            <h2>🎉 پیرۆزە! براوە بریتییە لە 🎉</h2>
+            <div class="winner-label">براوەی بەخت بریتییە لە:</div>
             <div class="winner-name" id="winnerText">---</div>
             <button class="btn-close" onclick="closeModal()">داخستن</button>
         </div>
@@ -262,11 +351,13 @@
         const ctx = canvas.getContext('2d');
         const nameInput = document.getElementById('nameInput');
         const nameList = document.getElementById('nameList');
+        const durationInput = document.getElementById('spinDuration');
+        const durationDisplay = document.getElementById('durationVal');
         
         // Initial Names
-        let names = ["ئەحمەد", "سارا", "محەمەد", "ڕۆژین", "کاردۆ", "دیلان"];
+        let names = ["ئەحمەد", "سارا", "محەمەد", "ڕۆژین", "کاردۆ", "دیلان", "هەژار", "نیان"];
         
-        // Colors for segments
+        // Professional Color Palette
         const colors = [
             '#ef4444', '#f97316', '#f59e0b', '#10b981', 
             '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#ec4899'
@@ -278,6 +369,12 @@
         function init() {
             drawWheel();
             renderNameList();
+            updateSettings();
+        }
+
+        function updateSettings() {
+            const duration = durationInput.value;
+            durationDisplay.innerText = duration + 's';
         }
 
         function addName() {
@@ -316,40 +413,38 @@
 
         function drawWheel() {
             const numSegments = names.length;
-            if (numSegments === 0) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                return;
-            }
-
-            const anglePerSegment = (2 * Math.PI) / numSegments;
+            const arcSize = (2 * Math.PI) / numSegments;
             const radius = canvas.width / 2;
             const centerX = radius;
             const centerY = radius;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            names.forEach((name, i) => {
-                const startAngle = i * anglePerSegment;
-                const endAngle = startAngle + anglePerSegment;
+            if (numSegments === 0) return;
 
+            names.forEach((name, i) => {
+                const angle = i * arcSize;
+                
                 // Draw Slice
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.arc(centerX, centerY, radius, angle, angle + arcSize);
                 ctx.fillStyle = colors[i % colors.length];
                 ctx.fill();
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 4;
                 ctx.stroke();
 
                 // Draw Text
                 ctx.save();
                 ctx.translate(centerX, centerY);
-                ctx.rotate(startAngle + anglePerSegment / 2);
+                ctx.rotate(angle + arcSize / 2);
                 ctx.textAlign = "right";
                 ctx.fillStyle = "white";
-                ctx.font = "bold 24px 'Rudaw', Arial"; // Larger font for visibility
+                ctx.font = "bold 26px 'Rudaw', Arial";
                 ctx.shadowColor = "rgba(0,0,0,0.5)";
                 ctx.shadowBlur = 4;
-                ctx.fillText(name, radius - 30, 10);
+                ctx.fillText(name, radius - 40, 10);
                 ctx.restore();
             });
         }
@@ -358,47 +453,57 @@
             if (isSpinning || names.length === 0) return;
 
             isSpinning = true;
-            
-            // Calculate random rotation (at least 5 full spins + random segment)
-            const minSpins = 5;
+            const duration = parseInt(durationInput.value); // Get seconds from settings
+
+            // Logic for Spin
+            // We want to rotate at least 5 full circles (1800 deg) + random
+            const minSpins = 5; 
             const randomDegree = Math.floor(Math.random() * 360);
-            const totalDegree = (minSpins * 360) + randomDegree;
+            const totalSpin = (minSpins * 360) + randomDegree;
+            
+            // Update current rotation to keep spinning forward
+            currentRotation += totalSpin;
 
-            currentRotation += totalDegree;
-
-            // Apply CSS rotation
+            // Apply Transition dynamically based on settings
+            // cubic-bezier(0.25, 0.1, 0.25, 1) creates a nice start-fast end-slow effect
+            canvas.style.transition = `transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
+            
+            // The negative rotation makes it spin counter-clockwise visually,
+            // but we can calculate based on the pointer being at TOP (270 deg)
             canvas.style.transform = `rotate(-${currentRotation}deg)`;
 
-            // Wait for animation to finish (4s matches CSS transition)
+            // Wait for animation to finish
             setTimeout(() => {
                 isSpinning = false;
                 determineWinner(currentRotation);
-            }, 4000);
+            }, duration * 1000);
         }
 
         function determineWinner(rotation) {
             const numSegments = names.length;
-            const anglePerSegment = 360 / numSegments;
+            const degPerSegment = 360 / numSegments;
             
-            // Normalize rotation to 0-360
-            const actualRotation = rotation % 360;
+            // MATHEMATICAL FIX:
+            // The pointer is at the TOP (270 degrees).
+            // The wheel rotates "Counter Clockwise" via CSS negative rotate.
+            // Imagine the wheel has 0 at East, 90 at South, 180 West, 270 North.
+            // When we rotate -X degrees, the slice at angle A moves to A - X.
+            // We want to know which original angle ends up at 270 (North).
+            // (OriginalAngle - Rotation) % 360 = 270
+            // OriginalAngle = 270 + Rotation
             
-            // Since arrow is at top (270deg or -90deg) relative to canvas 0 (right)
-            // But we rotated the canvas negative.
-            // Let's calculate which index is at the top (pointer).
-            // Pointer is fixed at top.
+            // Normalize rotation to 0-360 range
+            const effectiveRotation = rotation % 360;
             
-            // Formula to find the winning index based on the pointer at the TOP
-            // The canvas starts drawing at 0 (Right). 
-            // CSS Rotate moves it counter-clockwise.
+            // Calculate the angle on the wheel that is currently under the pointer (270deg)
+            // We add 270 because pointer is at top.
+            let winningAngle = (270 + effectiveRotation) % 360;
             
-            let winningIndex = Math.floor(((360 - actualRotation + 90) % 360) / anglePerSegment);
+            // Calculate Index
+            let winningIndex = Math.floor(winningAngle / degPerSegment);
             
-            // Adjust because index might wrap incorrectly in JS modulo
-            if (winningIndex < 0) winningIndex = numSegments + winningIndex;
-            
-            // Double check boundary
-            winningIndex = winningIndex % numSegments;
+            // Safety check (though math should be correct)
+            winningIndex = (winningIndex + numSegments) % numSegments;
 
             const winner = names[winningIndex];
             showWinner(winner);
@@ -409,6 +514,10 @@
             document.getElementById('winnerModal').style.display = 'flex';
             
             // Fire Confetti
+            launchConfetti();
+        }
+
+        function launchConfetti() {
             var duration = 3000;
             var end = Date.now() + duration;
 
@@ -417,13 +526,15 @@
                     particleCount: 5,
                     angle: 60,
                     spread: 55,
-                    origin: { x: 0 }
+                    origin: { x: 0 },
+                    colors: colors
                 });
                 confetti({
                     particleCount: 5,
                     angle: 120,
                     spread: 55,
-                    origin: { x: 1 }
+                    origin: { x: 1 },
+                    colors: colors
                 });
 
                 if (Date.now() < end) {
